@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Star</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="./three.js"></script>
+		<script>
+        const scene = new THREE.Scene();
+        const loader = new THREE.TextureLoader();
+        loader.load('https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg' , function(texture) { scene.background = texture; });
+        const camera = new THREE.PerspectiveCamera(135, window.innerWidth/window.innerHeight, 0.1, 10);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const geometry = new THREE.SphereGeometry(3.2, 150, 150);
+
+        const blackMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+        const blackHole = new THREE.Mesh(geometry, blackMaterial);
+
+        const starTexture = new THREE.TextureLoader().load('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Solarsystemscope_texture_2k_sun.jpg/1200px-Solarsystemscope_texture_2k_sun.jpg');
+        const starMaterial = new THREE.MeshBasicMaterial( { map: starTexture } );
+        const star = new THREE.Mesh(geometry, starMaterial);
+
+        const planetTexture =  new THREE.TextureLoader().load('https://t4.ftcdn.net/jpg/02/24/14/81/360_F_224148194_xrGaLP6RZbCL7B3vOMYYr2dVrcg95RFt.jpg');
+        const planetMaterial = new THREE.MeshBasicMaterial({ map: planetTexture });
+        const planet = new THREE.Mesh(geometry, planetMaterial);
+
+        const moonTexture = new THREE.TextureLoader().load('https://t4.ftcdn.net/jpg/03/09/04/59/360_F_309045980_zKAgyd8feCR69CMWQ1PlhCHhteODo9zd.jpg');
+        const moonMaterial = new THREE.MeshBasicMaterial({ map: moonTexture });
+        const moon = new THREE.Mesh(geometry, moonMaterial);
+
+        scene.add(blackHole);
+
+        const star_group = new THREE.Group();
+        blackHole.add(star_group);
+        star_group.add(star);
+        star.scale.x = star.scale.y = star.scale.z = 1.13;
+        star_group.position.x = 15;
+
+        const planet_group = new THREE.Group();
+        star.add(planet_group);
+        planet_group.add(planet);
+        planet.scale.x = planet.scale.y = planet.scale.z = 0.9;
+        planet_group.position.x = 6;
+
+        const moon_group = new THREE.Group();
+        planet.add(moon_group);
+        moon_group.add(moon);
+        moon.scale.x = moon.scale.y = moon.scale.z = 0.93;
+        moon_group.position.x = 3;
+
+        camera.position.z = 13;
+
+        function render() {
+            requestAnimationFrame(render);
+            blackHole.rotation.z += 0.005;
+            star.rotation.z += 0.015;
+            planet.rotation.z += 0.03;
+            moon.rotation.z += 0.09;
+            renderer.render(scene, camera);
+        }
+        render();
+		</script>
+	</body>
+</html>
